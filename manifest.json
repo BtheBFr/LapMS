@@ -1,0 +1,16 @@
+{
+    "name": "Lap.MS",
+    "short_name": "LapMS",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0a0a0a",
+    "theme_color": "#6c5ce7",
+    "description": "Мессенджер Lap.MS",
+    "icons": [
+        {
+            "src": "https://via.placeholder.com/192x192?text=L",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ]
+}
