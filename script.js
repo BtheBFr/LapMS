@@ -1,6 +1,6 @@
 // script.js - Lap.MS мессенджер
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbzZImFZssR1IjPLu6zIVrEU3ez6bn7H0tSMj4NQ0QAtftxMreSOQJ81IyO6JFD3W1S61Q/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwCQ810p1F5XhIO94Armb5iY5_W73MKRcPsHERMdOZvbk7E0zFocR1Qy7hd4rYOhqMPhw/exec';
 
 // Текущее состояние
 let state = {
