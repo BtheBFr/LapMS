@@ -18,6 +18,31 @@ let state = {
     }
 };
 
+// ========== API ЗАПРОСЫ (ТОЛЬКО GET) ==========
+async function callAPI(action, params = {}) {
+    try {
+        // Строим URL с параметрами
+        let url = `${API_URL}?action=${action}`;
+        
+        // Добавляем все параметры в URL
+        for (let key in params) {
+            if (params[key] !== undefined && params[key] !== null && params[key] !== '') {
+                url += `&${key}=${encodeURIComponent(params[key])}`;
+            }
+        }
+        
+        const response = await fetch(url);
+        const result = await response.json();
+        
+        console.log(`API ${action}:`, result);
+        return result;
+        
+    } catch(e) {
+        console.error('API Error:', e);
+        return { success: false, error: 'Ошибка соединения' };
+    }
+}
+
 // ========== ИНИЦИАЛИЗАЦИЯ ==========
 document.addEventListener('DOMContentLoaded', () => {
     loadCachedData();
@@ -45,21 +70,6 @@ function saveSession() {
         user: state.user,
         settings: state.settings
     }));
-}
-
-// ========== API ЗАПРОСЫ ==========
-async function callAPI(action, data = {}) {
-    try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            body: JSON.stringify({ action, ...data }),
-            headers: { 'Content-Type': 'application/json' }
-        });
-        return await response.json();
-    } catch(e) {
-        console.error('API Error:', e);
-        return { success: false, error: 'Ошибка соединения' };
-    }
 }
 
 // ========== ВХОД ==========
@@ -327,16 +337,8 @@ async function handleFileUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
     
-    // Загрузка на Drive через API
-    const formData = new FormData();
-    formData.append('token', state.token);
-    formData.append('file', file);
-    formData.append('type', file.type.startsWith('image/') ? 'photo' : 
-                          file.type.startsWith('video/') ? 'video' :
-                          file.type.startsWith('audio/') ? 'audio' : 'file');
-    
-    // Здесь нужен endpoint для загрузки файлов
-    // Временно сохраняем локально
+    // Для файлов нужно загружать через POST с FormData
+    // Пока сохраняем локально
     const reader = new FileReader();
     reader.onload = async (e) => {
         pendingFile = {
