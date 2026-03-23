@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>Lap.MS — мессенджер</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="app" id="app">
+        <!-- ЭКРАН ВХОДА -->
+        <div class="screen" id="loginScreen">
+            <div class="login-container">
+                <div class="logo">
+                    <h1>Lap<span>MS</span></h1>
+                    <p>мессенджер</p>
+                </div>
+                
+                <div class="login-tabs">
+                    <button class="tab-btn active" data-tab="login">Вход</button>
+                    <button class="tab-btn" data-tab="register">Регистрация</button>
+                </div>
+                
+                <!-- Форма входа -->
+                <div class="tab-panel active" id="loginPanel">
+                    <div class="input-group">
+                        <input type="text" id="loginToken" placeholder="Токен" autocomplete="off">
+                    </div>
+                    
+                    <div class="login-method">
+                        <button class="method-btn active" data-method="password">Пароль</button>
+                        <button class="method-btn" data-method="code">Код из TG</button>
+                    </div>
+                    
+                    <div id="passwordField" class="input-group">
+                        <input type="password" id="loginPassword" placeholder="Пароль">
+                    </div>
+                    
+                    <div id="codeField" style="display: none;">
+                        <div class="input-group">
+                            <input type="text" id="loginCode" placeholder="Код из Telegram">
+                        </div>
+                        <button class="btn-secondary" id="getCodeBtn">📱 Получить код</button>
+                        <p class="hint">Код придет в Telegram бота <a href="https://t.me/LapMS_bot" target="_blank">@LapMS_bot</a><br>Действует 10 минут</p>
+                    </div>
+                    
+                    <button class="btn-primary" id="loginBtn">Войти</button>
+                    <div class="error-msg" id="loginError"></div>
+                </div>
+                
+                <!-- Форма регистрации -->
+                <div class="tab-panel" id="registerPanel">
+                    <p class="register-info">
+                        Регистрация через Telegram бота:<br>
+                        <a href="https://t.me/LapMS_bot" target="_blank" class="tg-link">@LapMS_bot</a>
+                    </p>
+                    <p class="register-hint">
+                        После регистрации вы получите токен для входа<br>
+                        и сможете пользоваться мессенджером
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ОСНОВНОЙ ИНТЕРФЕЙС (после входа) -->
+        <div class="screen" id="mainScreen" style="display: none;">
+            <!-- Боковая панель (десктоп) -->
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h2>Lap<span>MS</span></h2>
+                    <button class="mobile-close" id="closeSidebar">✕</button>
+                </div>
+                
+                <div class="user-info">
+                    <div class="avatar" id="userAvatar"></div>
+                    <div class="user-details">
+                        <span class="user-name" id="userName"></span>
+                        <span class="user-tag" id="userTag"></span>
+                    </div>
+                </div>
+                
+                <div class="search-box">
+                    <input type="text" id="searchChats" placeholder="Поиск чатов или @username">
+                </div>
+                
+                <div class="nav-menu">
+                    <button class="nav-btn" data-view="chats">
+                        <span>💬</span> Чаты
+                    </button>
+                    <button class="nav-btn" data-view="groups">
+                        <span>👥</span> Группы
+                    </button>
+                    <button class="nav-btn" data-view="channels">
+                        <span>📢</span> Каналы
+                    </button>
+                    <button class="nav-btn" data-view="favorites">
+                        <span>⭐</span> Избранное
+                    </button>
+                    <button class="nav-btn" data-view="profile">
+                        <span>👤</span> Профиль
+                    </button>
+                    <button class="nav-btn" data-view="settings">
+                        <span>⚙️</span> Настройки
+                    </button>
+                    <button class="nav-btn admin-only" data-view="admin" id="adminBtn" style="display: none;">
+                        <span>🛡️</span> Админ панель
+                    </button>
+                </div>
+                
+                <button class="logout-btn" id="logoutBtn">
+                    <span>🚪</span> Выйти
+                </button>
+            </div>
+            
+            <!-- Основной контент -->
+            <div class="main-content">
+                <div class="chat-header" id="chatHeader">
+                    <button class="menu-toggle" id="menuToggle">☰</button>
+                    <div class="chat-info">
+                        <span class="chat-name" id="chatName"></span>
+                        <span class="chat-status" id="chatStatus"></span>
+                    </div>
+                    <div class="chat-actions">
+                        <button class="action-btn" id="infoBtn">ℹ️</button>
+                    </div>
+                </div>
+                
+                <div class="messages-container" id="messagesContainer">
+                    <div class="messages-list" id="messagesList">
+                        <!-- Сообщения будут здесь -->
+                    </div>
+                </div>
+                
+                <div class="input-area" id="inputArea">
+                    <button class="attach-btn" id="attachBtn">📎</button>
+                    <input type="text" id="messageInput" placeholder="Сообщение...">
+                    <button class="send-btn" id="sendBtn">📨</button>
+                </div>
+                
+                <!-- Скрытый input для файлов -->
+                <input type="file" id="fileInput" style="display: none" multiple>
+            </div>
+            
+            <!-- Панель чатов (список) -->
+            <div class="chats-panel" id="chatsPanel">
+                <div class="chats-header">
+                    <h3>Чаты</h3>
+                </div>
+                <div class="chats-list" id="chatsList">
+                    <!-- Список чатов -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно для медиа -->
+    <div class="modal" id="mediaModal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <video class="modal-content" id="modalVideo" controls></video>
+    </div>
+    
+    <audio id="notificationSound" preload="auto">
+        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script src="script.js"></script>
+</body>
+</html>
